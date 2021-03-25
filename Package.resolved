@@ -2,6 +2,24 @@
   "object": {
     "pins": [
       {
+        "package": "AppSyncRealTimeClient",
+        "repositoryURL": "https://github.com/pjechris/aws-appsync-realtime-client-ios",
+        "state": {
+          "branch": "main",
+          "revision": "4eee8d00b78f3b30fdcc9ca69325f3e6bb4c7a29",
+          "version": null
+        }
+      },
+      {
+        "package": "AWSiOSSDKV2",
+        "repositoryURL": "https://github.com/aws-amplify/aws-sdk-ios-spm",
+        "state": {
+          "branch": "testSPM",
+          "revision": "42b8cdb0929cf135980e2998398459221be950eb",
+          "version": null
+        }
+      },
+      {
         "package": "Reachability",
         "repositoryURL": "https://github.com/ashleymills/Reachability.swift.git",
         "state": {
