@@ -11,7 +11,6 @@ let package = Package(
             targets: ["AWSAppSync"]),
     ],
     dependencies: [
-        // TODO: Add AWS iOS SDK and Realtime client
         .package(name: "AppSyncRealTimeClient", url: "https://github.com/pjechris/aws-appsync-realtime-client-ios", .branch("main")),
         .package(name: "AWSiOSSDKV2", url: "https://github.com/aws-amplify/aws-sdk-ios-spm", .branch("testSPM")),
         .package(url: "https://github.com/stephencelis/SQLite.swift.git", from: "0.12.0"),
