@@ -1,8 +1,9 @@
 language: swift
-osx_image: xcode13.1
+osx_image: xcode13.2
 env:
   global:
   - FRAMEWORK_NAME=AWSAppSync
+  - BUILD_FOLDER=./build
 xcode_workspace: AWSAppSyncClient.xcworkspace
 xcode_scheme: AWSAppSync
 before_install:
@@ -16,13 +17,16 @@ before_install:
 before_deploy:
 - bash ./build-support/carthage-build.sh build --no-skip-current
 - bash ./build-support/carthage-build.sh archive $FRAMEWORK_NAME
+- bash ./build-support/build-xcframeworks.sh $FRAMEWORK_NAME
 script:
 - xcodebuild -quiet -workspace AWSAppSyncClient.xcworkspace -scheme AWSAppSync build test -destination 'platform=iOS Simulator,name=iPhone 11,OS=latest'
 deploy:
 - provider: releases
   api_key:
-    secure: "uxxW59mdOd/y14uOsFqngzV6lB7SkTCm28BUpOuJ7BZwpn8bsmpSufqrqunIOqanKquiRMyHiksvU1IOb83I/tkdpThjkTAVY0Erv5osV+5cBVyTn9dsn8hImLnOMLoRD1fLX+M988+WvXpoWmi9gz68QOQkGDdeAfGIE+I67zfYhYgKzIVCcZsFCPrTvsuhDa6Fe/OlG/BEyeU2i9Jct+g68DbHkEl4DjGOKmAvzLrgQ6+Kz8lGRnhLLJbKiv3cPHl6vhhKc/oXvZtAZpQAK9C0kNuiNS9VPcLYgwrfR16mYyLHKLotK840u6TTzbTx0b4kAB1McUKy+ENDI+UXdpeVDXIw5ZnGsXATpYdWjeJdXNX0naoF/3ZtERSi9C/sju3sbELjC65M820qubhCLg6J3lIa9LBauV4IOhKwSJA5FnenrlL+srMT1dqnRz4ZATszis4anEmqfsp9T1FEsRYS3RmcEbWhM681FBYgzOpG9mMQmgtLkrWJNzUaELeYQz7ng9iFLauUG1iFcIeekF6eKp6s8E+vvBYWlzbX2GCLDb4RvepAo0BrhoT3bzmQHznL8HQJXuRDY4Lk87G72EyblmWvJ1R/ZN8QXejH9Ko1naT36zT8o3EkdCbrrcyesaoIvG6PTtPw7GXMTgapWpBB7KokYLMiOGw+dTxMTiY="
-  file: "$FRAMEWORK_NAME.framework.zip"
+    secure: "oDUBspMZ/NZMHv3WwsMbyPOSY2uhmA40Ui3+0n3zKTy4lKVRnh/ahqq6WVty/EUmkMbq938LIYmW36VL2W6IkERje5jeUrNrI1U4Igs0gwoU7RKr/cFNIV4NSKrS6L/0Jg0DXsmi+64SMAUJXSS9071XecMVzIVBTlIoA0rQZ7F1RkyImZIjPXZt26pbB7x4iirAvjKK/mrJXfh/BNw3izEMWsI2CRfbWDGCy2NnKQZYLUdzdOpwzTu2kOKru77NgrDw25H2OP64DS4PVsFeuxw8eSnAsQIuci4ZG/0DAvWPjhsZ6YOrQtWR87cxIE9HwU/mi43B4f4D+8YabrQ3GvivDqOCRorYte0d9Ks5bXOT6TqMSGbW2YZLMeRAw8GG8XRSEz+SPx2tZYZMu+KZLYjbSDOw8IDlcClINKaTz3okbmNh18yrE7z1WX7BDwX0BP4mbJqIDVtGZcbbUf8161PFbPuTNMrEMwW34WfK3kXQeqDwjuu52n71NhwtprMpLA1OxEBSK95sAmyMI9JOWvcEgOtnSSzefCC3K27LGvr84fjgq6JBMPcdhYE7Zm7AnguD7ukYROfQo2O/ikOb7FTk/X7Zk44SiSmdinck9p870nOCRjCDg0G7lPxDHT8EjC22c0tJCMqiJqw3olCztv2PsO02+T0tJT5TWCS5qfA="
+  file:
+    - "$FRAMEWORK_NAME.framework.zip"
+    - "$BUILD_FOLDER/$FRAMEWORK_NAME.xcframework.zip"
   skip_cleanup: true
   on:
    repo: awslabs/aws-mobile-appsync-sdk-ios
