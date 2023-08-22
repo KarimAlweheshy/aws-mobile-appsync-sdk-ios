@@ -1,3 +1,10 @@
+## Recommendation: Use [Amplify](https://aws-amplify.github.io/) clients to connect to AppSync
+
+For front-end web and mobile development, we recommend using the [Amplify](https://aws-amplify.github.io/) clients which are optimized to connect to the AppSync backend.
+
+- For DynamoDB data sources, use the [DataStore](https://docs.amplify.aws/lib/datastore/getting-started/q/platform/ios/) category in the Amplify client. It provides the best developer experience and built-in conflict detection and resolution.
+- For non-DynamoDB data sources in scenarios where you have no offline requirements, use the [API (GraphQL)](https://docs.amplify.aws/lib/graphqlapi/getting-started/q/platform/ios/) category in the Amplify client.
+
 AWS AppSync SDK for iOS
 =======================
 
@@ -35,7 +42,7 @@ The AWS AppSync SDK for iOS enables you to access your AWS AppSync backend and p
 1. Add the following line to your Podfile:
 
     ```ruby
-    pod 'AWSAppSync', '~> 3.6.1'
+    pod 'AWSAppSync', '~> 3.6.2'
     ```
 
     Example:
@@ -49,7 +56,7 @@ The AWS AppSync SDK for iOS enables you to access your AWS AppSync backend and p
       use_frameworks!
 
       # Pods for EventsApp
-      pod 'AWSAppSync', '~> 3.6.1'
+      pod 'AWSAppSync', '~> 3.6.2'
     end
     ```
 
