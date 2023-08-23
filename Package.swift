@@ -14,21 +14,16 @@ let package = Package(
         .package(
             name: "AWSiOSSDKV2",
             url: "https://github.com/aws-amplify/aws-sdk-ios-spm.git",
-            .upToNextMinor(from: "2.27.0")
+            .upToNextMinor(from: "2.32.0")
         ),
         .package(
             name: "AppSyncRealTimeClient",
             url: "https://github.com/aws-amplify/aws-appsync-realtime-client-ios.git",
-            from: "1.8.0"
+            from: "3.1.1"
         ),
         .package(
             url: "https://github.com/stephencelis/SQLite.swift.git",
             from: "0.12.0"
-        ),
-        .package(
-            name: "Reachability",
-            url: "https://github.com/ashleymills/Reachability.swift.git",
-            from: "5.0.0"
         )
     ],
     targets: [
@@ -38,7 +33,6 @@ let package = Package(
                 
                 .product(name: "SQLite", package: "SQLite.swift"),
                 .product(name: "AppSyncRealTimeClient", package: "AppSyncRealTimeClient"),
-                .product(name: "Reachability", package: "Reachability"),
                 .product(name: "AWSCore", package: "AWSiOSSDKV2")
             ],
             path: "AWSAppSyncClient",
