@@ -39,7 +39,7 @@ public class AWSAppSyncHTTPNetworkTransport: AWSNetworkTransport {
     private let authProvider: AppSyncAuthProvider
     private let sendOperationIdentifiers: Bool
     private var retryStrategy: AWSAppSyncRetryStrategy
-    
+
     private let activeTimersQueue = DispatchQueue(label: "AWSAppSyncHTTPNetworkTransport.activeTimers")
     private var activeTimers: [String: DispatchSourceTimer] = [:]
 
@@ -140,7 +140,7 @@ public class AWSAppSyncHTTPNetworkTransport: AWSNetworkTransport {
             retryStrategy: retryStrategy
         )
     }
-    
+
     /// Creates a network transport with the specified server URL and session configuration.
     ///
     /// - Parameters:
@@ -192,23 +192,19 @@ public class AWSAppSyncHTTPNetworkTransport: AWSNetworkTransport {
         request.setValue(UUID().uuidString, forHTTPHeaderField: "x-choco-correlation-id")
         request.setValue(NSDate().aws_stringValue(AWSDateISO8601DateFormat2), forHTTPHeaderField: "X-Amz-Date")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("aws-sdk-ios/3.6.1 AppSyncClient", forHTTPHeaderField: "User-Agent")
+        request.setValue("aws-sdk-ios/3.7.1 AppSyncClient", forHTTPHeaderField: "User-Agent")
         addDeviceId(request: &request)
     }
 
     func addDeviceId(request: inout URLRequest) {
         switch authProvider {
         case .apiKey(let provider):
-            let data = provider.getAPIKey().data(using: .utf8)
-            request.setValue(fetchDeviceId(for: sha256(data: data!)), forHTTPHeaderField: "x-amz-subscriber-id")
+            let apiKey = provider.getAPIKey()
+            let hash = AWSSignatureSignerUtility.hashString(apiKey)
+            request.setValue(fetchDeviceId(for: hash), forHTTPHeaderField: "x-amz-subscriber-id")
         default:
             break
         }
-    }
-
-    func sha256(data: Data) -> String {
-        let hash = AWSSignatureSignerUtility.hash(data)
-        return hash.base64EncodedString()
     }
 
     /// Returns `deviceId` for the specified key from the keychain.
@@ -320,6 +316,7 @@ public class AWSAppSyncHTTPNetworkTransport: AWSNetworkTransport {
         return dataTask
     }
 
+    // swiftlint:disable cyclomatic_complexity
     /// Updates the sendRequest with the appropriate authentication parameters
     /// In the case of a token retrieval error, the errorCallback is invoked
     private func updateRequestWithAuthInformation(mutableRequest: NSMutableURLRequest,
@@ -378,7 +375,7 @@ public class AWSAppSyncHTTPNetworkTransport: AWSNetworkTransport {
                 mutableRequest.setValue(provider.getLatestAuthToken(), forHTTPHeaderField: "authorization")
                 completionHandler(.success(()))
             }
-        
+
         case .awsLambda(let provider):
             guard let asyncProvider = provider as? AWSLambdaAuthProviderAsync else {
                 mutableRequest.setValue(provider.getLatestAuthToken(), forHTTPHeaderField: "authorization")

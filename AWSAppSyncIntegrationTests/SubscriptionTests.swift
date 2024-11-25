@@ -29,7 +29,7 @@ class SubscriptionTests: XCTestCase {
         super.setUp()
 
         AWSDDLog.sharedInstance.logLevel = .warning
-        AWSDDTTYLogger.sharedInstance.logFormatter = AWSAppSyncClientLogFormatter()
+        AWSDDTTYLogger.sharedInstance?.logFormatter = AWSAppSyncClientLogFormatter()
         AWSDDLog.sharedInstance.add(AWSDDTTYLogger.sharedInstance)
 
         do {
@@ -67,14 +67,14 @@ class SubscriptionTests: XCTestCase {
         let addPost = DefaultTestPostData.defaultCreatePostWithoutFileUsingParametersMutation
 
         var idHolder: GraphQLID?
-        appSyncClient?.perform(mutation: addPost, queue: SubscriptionTests.mutationQueue) { result, error in
+        appSyncClient?.perform(mutation: addPost, queue: SubscriptionTests.mutationQueue, resultHandler:  { result, error in
             print("CreatePost result handler invoked")
             XCTAssertNil(error)
             XCTAssertNotNil(result?.data?.createPostWithoutFileUsingParameters?.id)
             XCTAssertEqual(result!.data!.createPostWithoutFileUsingParameters?.author, DefaultTestPostData.author)
             idHolder = result?.data?.createPostWithoutFileUsingParameters?.id
             postCreated.fulfill()
-        }
+        })
         wait(for: [postCreated], timeout: SubscriptionTests.networkOperationTimeout)
 
         guard let id = idHolder else {
@@ -117,20 +117,20 @@ class SubscriptionTests: XCTestCase {
 
         let upvotePerformed = expectation(description: "Upvote mutation performed")
         let upvoteMutation = UpvotePostMutation(id: id)
-        self.appSyncClient?.perform(mutation: upvoteMutation, queue: SubscriptionTests.mutationQueue) {
+        self.appSyncClient?.perform(mutation: upvoteMutation, queue: SubscriptionTests.mutationQueue, resultHandler:  {
             result, error in
             print("Received upvote mutation response.")
             XCTAssertNil(error)
             XCTAssertNotNil(result?.data?.upvotePost?.id)
             upvotePerformed.fulfill()
-        }
+        })
 
         wait(for: [upvotePerformed, subscriptionResultHandlerInvoked], timeout: SubscriptionTests.networkOperationTimeout)
     }
 
     func testSubscriptionReceivesConnectedMessage() throws {
         AWSDDLog.sharedInstance.logLevel = .verbose
-        AWSDDTTYLogger.sharedInstance.logFormatter = AWSAppSyncClientLogFormatter()
+        AWSDDTTYLogger.sharedInstance?.logFormatter = AWSAppSyncClientLogFormatter()
         AWSDDLog.sharedInstance.add(AWSDDTTYLogger.sharedInstance)
 
         let statusChangedToConnected = expectation(description: "Subscription received status change notification to 'connected'")
@@ -163,11 +163,11 @@ class SubscriptionTests: XCTestCase {
         let postCreated = expectation(description: "Post created successfully.")
         let addPost = DefaultTestPostData.defaultCreatePostWithoutFileUsingParametersMutation
         var idHolder: GraphQLID?
-        appSyncClient.perform(mutation: addPost, queue: SubscriptionTests.mutationQueue) { result, error in
+        appSyncClient.perform(mutation: addPost, queue: SubscriptionTests.mutationQueue, resultHandler:  { result, error in
             print("CreatePost result handler invoked")
             idHolder = result?.data?.createPostWithoutFileUsingParameters?.id
             postCreated.fulfill()
-        }
+        })
         wait(for: [postCreated], timeout: SubscriptionTests.networkOperationTimeout)
 
         guard let id = idHolder else {
@@ -221,9 +221,9 @@ class SubscriptionTests: XCTestCase {
         let upvoteComplete = expectation(description: "Upvote mutation completed")
 
         self.appSyncClient?.perform(mutation: upvote,
-                                    queue: SubscriptionTests.mutationQueue) { _, _ in
-                                        upvoteComplete.fulfill()
-        }
+                                    queue: SubscriptionTests.mutationQueue, resultHandler:  { _, _ in
+            upvoteComplete.fulfill()
+        })
 
         wait(
             for: [
@@ -378,9 +378,9 @@ class SubscriptionTests: XCTestCase {
 
         let newPostCreated = expectation(description: "New post created")
         self.appSyncClient?.perform(mutation: newPost,
-                                    queue: SubscriptionTests.mutationQueue) { _, _ in
-                                        newPostCreated.fulfill()
-        }
+                                    queue: SubscriptionTests.mutationQueue, resultHandler:  { _, _ in
+            newPostCreated.fulfill()
+        })
 
         wait(for: [newPostCreated, subscriptionWatcherTriggered], timeout: SubscriptionTests.networkOperationTimeout)
     }
