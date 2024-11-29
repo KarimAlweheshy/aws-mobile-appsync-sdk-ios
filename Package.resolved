@@ -6,8 +6,8 @@
         "repositoryURL": "https://github.com/aws-amplify/aws-appsync-realtime-client-ios.git",
         "state": {
           "branch": null,
-          "revision": "1932e1d6289e9f0c9656cefe6218d5097720bf3f",
-          "version": "1.8.0"
+          "revision": "9fd77b043e06193848a68740dfde0836648b2b4e",
+          "version": "3.2.0"
         }
       },
       {
@@ -15,17 +15,8 @@
         "repositoryURL": "https://github.com/aws-amplify/aws-sdk-ios-spm.git",
         "state": {
           "branch": null,
-          "revision": "6eec01dd884f2eea57ea13fdbf23fad1a6562cef",
-          "version": "2.27.0"
-        }
-      },
-      {
-        "package": "Reachability",
-        "repositoryURL": "https://github.com/ashleymills/Reachability.swift.git",
-        "state": {
-          "branch": null,
-          "revision": "c01bbdf2d633cf049ae1ed1a68a2020a8bda32e2",
-          "version": "5.1.0"
+          "revision": "3588f2d300e4a5cbeee09d37d795db94e6158112",
+          "version": "2.36.2"
         }
       },
       {
@@ -42,8 +33,8 @@
         "repositoryURL": "https://github.com/daltoniam/Starscream",
         "state": {
           "branch": null,
-          "revision": "df8d82047f6654d8e4b655d1b1525c64e1059d21",
-          "version": "4.0.4"
+          "revision": "c6bfd1af48efcc9a9ad203665db12375ba6b145a",
+          "version": "4.0.8"
         }
       }
     ]
